@@ -1,0 +1,34 @@
+# DB design
+
+# User 
+    - name      CharField
+    - phone     CharField
+
+
+# Category
+    - name      CharField
+
+# Food 
+    - name          CharField
+    - description   TextField
+    - price         IntegerField
+    - category      FK -> Category (one-to-many)
+
+# Table
+    - table number      Integer
+    - capacity          integer
+    - available         bool
+    - status            enum(Empty, Pending, Completed)
+
+# Order
+    - user              FK -> User (one-to-many)
+    - food              FK -> Food (many-to-many)
+    - table             FK -> Table (one-to-many)
+    - total price       float/int 
+    - status            enum(Pending, Completed, Delivered)
+    - payment_status    bool
+
+# OrderItem
+    - order_id      FK(Order)
+    - food_id       FK(Food)
+
