@@ -18,8 +18,7 @@
     - table number      Integer
     - capacity          integer
     - available         bool
-    - status            enum(Empty, Pending, Completed)
-
+   
 # Order
     - user              FK -> User (one-to-many)
     - food              FK -> Food (many-to-many)
