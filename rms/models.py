@@ -3,25 +3,43 @@ from django.contrib.auth import get_user_model     # Import this to use the defa
 
 # Create your models here.
 
-User = get_user_model()
 
+#1. User table: 
+User = get_user_model()     # It fetches the active user model from the project (can be either default or custom).
+
+
+#2. Category table: 
 class Category(models.Model):
     name = models.CharField(max_length = 20)
     
+    def __str__(self):             # This is a dunder function. It displays object as a string in admin panel. 
+        return self.name
+        
+
+#3. Food table: 
 class Food(models.Model):
     name = models.CharField(max_length=20)
     description = models.TextField()
     price = models.IntegerField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank = True)
+    
+    def __str__(self):       
+        return self.name
 
+
+#4. Table table: 
 class Table(models.Model):
-    table_number = models.IntegerField()
+    table_number = models.CharField(max_length=15)  # 'CharField' is used bec. table number can be 'A','B','C' also.
     capacity = models.IntegerField()
     available = models.BooleanField()
+    
+    def __str__(self):             
+        return self.table_number
 
 
+#5. Order table: 
 class Order(models.Model):
-    STATUS_CHOICES= [
+    STATUS_CHOICES= [               # Enum for status
         ("pending", "Pending"),
         ("completed", "Completed"),
         ("delivered", "Delivered")
@@ -33,7 +51,14 @@ class Order(models.Model):
     status = models.CharField(max_length=15, choices = STATUS_CHOICES, default = 'pending')
     payment_status = models.BooleanField()
     
+    def __str__(self):
+        return f"User: {self.user} - {self.food}"
+    
 
+#6. OrderItem junction table: 
+
+## Junction table is used here to create many-to-many relation between order and food. 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.PROTECT)
     food = models.ForeignKey(Food, on_delete=models.PROTECT)
+
