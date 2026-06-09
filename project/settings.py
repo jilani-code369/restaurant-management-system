@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rms',
+    'rms',      
 ]
 
 MIDDLEWARE = [
@@ -73,10 +73,24 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+
+
+# Postgres Integration
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    'default' : {
+        'ENGINE' : 'django.db.backends.postgresql',     # Path of 'postgresql' package
+        'NAME'  : 'rms2',                               # Name of your database
+        'USER' : 'postgres',                            # Username tha you have set
+        'PASSWORD' : '123',                             # Password that you have set
+        'HOST'  : 'localhost',                          # Host name. 'localhost' in this case
+        'PORT'  : '5432'                                # Port. '5432' by default
     }
 }
 
