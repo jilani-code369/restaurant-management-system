@@ -1,18 +1,18 @@
 from django.db import models 
-from django.contrib.auth import get_user_model    # Import this to use the default User in django
+from django.contrib.auth import get_user_model    # import this to use the default User in django
 
 # Create your models here.
 
 
 #1. User table: 
-User = get_user_model()     # It fetches the active user model from the project (can be either default or custom).
+User = get_user_model()     # it fetches the active user model from the project (can be either default or custom).
 
 
 #2. Category table: 
 class Category(models.Model):
     name = models.CharField(max_length = 20)
     
-    def __str__(self):             # This is a dunder function. It displays object as a string in admin panel. 
+    def __str__(self):             # this is a dunder function. It displays object as a string in admin panel. 
         return self.name
         
 
@@ -39,7 +39,7 @@ class Table(models.Model):
 
 #5. Order table: 
 class Order(models.Model):
-    STATUS_CHOICES= [               # Enum for status
+    STATUS_CHOICES= [               # enum for status
         ("pending", "Pending"),
         ("completed", "Completed"),
         ("delivered", "Delivered")
