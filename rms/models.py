@@ -1,5 +1,5 @@
 from django.db import models 
-from django.contrib.auth import get_user_model     # Import this to use the default User in django
+from django.contrib.auth import get_user_model    # Import this to use the default User in django
 
 # Create your models here.
 
@@ -31,7 +31,7 @@ class Food(models.Model):
 class Table(models.Model):
     table_number = models.CharField(max_length=15)  # 'CharField' is used bec. table number can be 'A','B','C' also.
     capacity = models.IntegerField()
-    available = models.BooleanField()
+    available = models.BooleanField(default = True)
     
     def __str__(self):             
         return self.table_number
@@ -45,14 +45,13 @@ class Order(models.Model):
         ("delivered", "Delivered")
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE, null = True, blank = True)
-    food = models.ForeignKey(Food, on_delete=models.CASCADE, null = True, blank = True)
     table = models.ForeignKey(Table, on_delete=models.CASCADE, null = True, blank = True)
     total_price = models.FloatField()
     status = models.CharField(max_length=15, choices = STATUS_CHOICES, default = 'pending')
     payment_status = models.BooleanField()
     
     def __str__(self):
-        return f"User: {self.user} - {self.food}"
+        return f"User: {self.user} - {self.table}"
     
 
 #6. OrderItem junction table: 
