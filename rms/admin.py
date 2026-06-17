@@ -58,5 +58,6 @@ class OrderAdmin(admin.ModelAdmin):
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ['id', 'order', 'food']
     list_display_links = ['id', 'order','food']
-    
 
+
+    

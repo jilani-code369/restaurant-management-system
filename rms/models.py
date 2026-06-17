@@ -21,7 +21,7 @@ class Food(models.Model):
     name = models.CharField(max_length=20)
     description = models.TextField()
     price = models.IntegerField()
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank = True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
     
     def __str__(self):       
         return self.name
@@ -44,11 +44,11 @@ class Order(models.Model):
         ("completed", "Completed"),
         ("delivered", "Delivered")
     ]
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null = True, blank = True)
-    table = models.ForeignKey(Table, on_delete=models.CASCADE, null = True, blank = True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null = True)
+    table = models.ForeignKey(Table, on_delete=models.CASCADE, null = True)
     total_price = models.FloatField()
     status = models.CharField(max_length=15, choices = STATUS_CHOICES, default = 'pending')
-    payment_status = models.BooleanField()
+    payment_status = models.BooleanField(default=False)
     
     def __str__(self):
         return f"User: {self.user} - {self.table}"
