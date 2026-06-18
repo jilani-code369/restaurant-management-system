@@ -4,23 +4,23 @@ from django.urls import path
 urlpatterns = [
     
     # Category routes: 
-    path('category/',category_list),
-    path('category/<id>/',category_detail),
+    path('category/', CategoryView.as_view()),
+    path('category/<id>/', CategoryDetail.as_view()),
     
     # Food routes: 
-    path('food/', food_list),
-    path('food/<id>/', food_detail),
+    path('food/', FoodView.as_view()),
+    path('food/<id>/', FoodDetail.as_view()),
     
     
     # Table routes: 
-    path('table/', table_list),
-    path('table/<id>/', table_detail),
+    path('table/', TableView.as_view()),
+    path('table/<id>/', TableDetail.as_view()),
     
     # Order routes: 
-    path('order/', order_list),
-    path('order/<id>/', order_detail),
+    path('order/', OrderView.as_view()),
+    path('order/<id>/', OrderDetail.as_view()),
     
     # OrderItem routes: 
-    path('order_item/', order_item_list),
-    path('order_item/<id>/', order_item_detail),
+    path('order_item/', OrderItemView.as_view()),
+    path('order_item/<id>/', OrderItemDetail.as_view()),
 ]

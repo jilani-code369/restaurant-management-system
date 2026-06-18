@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status 
+from rest_framework.views import APIView
 
 from .models import *
 from .serializers import *
@@ -10,17 +11,14 @@ from .serializers import *
 
 
 # Category API ------------------------------------------------------------------
-
-## GET, POST: 
-@api_view(['GET', 'POST'])
-def category_list(request):
-    if request.method == 'GET':
+class CategoryView(APIView):
+    def get(self, request):
         category = Category.objects.all()
         serializer = CategorySerializer(category, many = True)  # serialization : object converted into json
         
         return Response(serializer.data, status.HTTP_200_OK)
     
-    elif request.method == 'POST':
+    def post(self, request):
         serializer = CategorySerializer(data = request.data)   # deserialization : json converted into object
         serializer.is_valid(raise_exception = True)
         serializer.save()
@@ -28,17 +26,16 @@ def category_list(request):
         return Response(serializer.data, status.HTTP_201_CREATED)
 
 
-## GET (with id), PUT, DELETE: 
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def category_detail(request, id):
-    if request.method == 'GET':
+
+class CategoryDetail(APIView):
+    def get(self, request,id):
         category = Category.objects.get(id=id)
         serializer = CategorySerializer(category)
         
         return Response(serializer.data, status.HTTP_200_OK)
     
-    elif request.method == 'PUT':
+    def put(self, request,id):
         category = Category.objects.get(id=id)
         serializer = CategorySerializer(category, data = request.data)
         serializer.is_valid(raise_exception = True)
@@ -46,7 +43,7 @@ def category_detail(request, id):
         
         return Response(serializer.data, status.HTTP_201_CREATED)
 
-    elif request.method == 'DELETE':
+    def delete(self, request,id):
         category = Category.objects.get(id = id)
         category.delete()
         
@@ -57,16 +54,14 @@ def category_detail(request, id):
 # Food API ----------------------------------------------------------------------
 
 
-## GET, POST: 
-@api_view(['GET', 'POST'])
-def food_list(request):
-    if request.method == 'GET':
+class FoodView(APIView):
+    def get(self, request):
         food = Food.objects.all()
         serializer = FoodSerializer(food, many = True)
         
         return Response(serializer.data, status.HTTP_200_OK)
     
-    elif request.method == 'POST':
+    def post(self, request):
         serializer = FoodSerializer(data = request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -74,17 +69,14 @@ def food_list(request):
         return Response(serializer.data, status.HTTP_201_CREATED)
 
 
-## GET(with id), PUT, PATCH, DELETE:
-
-@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
-def food_detail(request, id):
-    if request.method == 'GET':
+class FoodDetail(APIView):
+    def get(self, request, id):
         food = Food.objects.get(id = id)
         serializer = FoodSerializer(food)
         
         return Response(serializer.data, 200)
     
-    elif request.method == 'PUT':
+    def put(self, request, id):
         food = Food.objects.get(id=id)
         serializer = FoodSerializer(food, data = request.data)
         serializer.is_valid(raise_exception=True)
@@ -93,7 +85,7 @@ def food_detail(request, id):
         return Response(serializer.data, 201)
     
     
-    elif request.method == 'PATCH':
+    def patch(self, request, id):
         food = Food.objects.get(id=id)
         serializer = FoodSerializer(food, data = request.data, partial = True)
         serializer.is_valid(raise_exception=True)
@@ -102,7 +94,7 @@ def food_detail(request, id):
         return Response(serializer.data, 201)
     
     
-    elif request.method == 'DELETE':
+    def delete(self, request, id):
         Food.objects.get(id=id).delete()
         
         return Response("Deleted successfully", 204)
@@ -111,16 +103,14 @@ def food_detail(request, id):
 
 # Table API --------------------------------------------------------
 
-## GET, POST: 
-@api_view(['GET', 'POST'])
-def table_list(request):
-    if request.method == 'GET':
+class TableView(APIView):
+    def get(self, request):
         food = Table.objects.all()
         serializer = TableSerializer(food, many = True)
         
         return Response(serializer.data, status.HTTP_200_OK)
     
-    elif request.method == 'POST':
+    def post(self, request):
         serializer = TableSerializer(data = request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -128,16 +118,15 @@ def table_list(request):
         return Response(serializer.data, status.HTTP_201_CREATED)
 
 
-## GET(with id), PUT, PATCH, DELETE:
-@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
-def table_detail(request, id):
-    if request.method == 'GET':
+
+class TableDetail(APIView):
+    def get(self, request, id):
         food = Table.objects.get(id = id)
         serializer = TableSerializer(food)
         
         return Response(serializer.data, 200)
     
-    elif request.method == 'PUT':
+    def put(self, request, id):
         food = Table.objects.get(id=id)
         serializer = TableSerializer(food, data = request.data)
         serializer.is_valid(raise_exception=True)
@@ -145,7 +134,7 @@ def table_detail(request, id):
         
         return Response(serializer.data, 201)
     
-    elif request.method == 'PATCH':
+    def patch(self, request, id):
         food = Table.objects.get(id=id)
         serializer = TableSerializer(food, data = request.data, partial = True)
         serializer.is_valid(raise_exception=True)
@@ -154,7 +143,7 @@ def table_detail(request, id):
         return Response(serializer.data, 201)
     
     
-    elif request.method == 'DELETE':
+    def delete(self, request, id):
         Table.objects.get(id=id).delete()
         
         return Response("Deleted successfully", 204)
@@ -163,16 +152,14 @@ def table_detail(request, id):
 
 # Order API -------------------------------------------------
 
-## GET, POST: 
-@api_view(['GET', 'POST'])
-def order_list(request):
-    if request.method == 'GET':
+class OrderView(APIView):
+    def get(self, request):
         order = Order.objects.all()
         serializer = OrderSerializer(order, many = True)
         
         return Response(serializer.data, status.HTTP_200_OK)
     
-    elif request.method == 'POST':
+    def post(self, request):
         serializer = OrderSerializer(data = request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -180,17 +167,14 @@ def order_list(request):
         return Response(serializer.data, status.HTTP_201_CREATED)
 
 
-## GET(with id), PUT, PATCH, DELETE:
-
-@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
-def order_detail(request, id):
-    if request.method == 'GET':
+class OrderDetail(APIView):
+    def get(self, request, id):
         order = Order.objects.get(id = id)
         serializer = OrderSerializer(order)
         
         return Response(serializer.data, 200)
     
-    elif request.method == 'PUT':
+    def put(self, request, id):
         order = Order.objects.get(id=id)
         serializer = OrderSerializer(order, data = request.data)
         serializer.is_valid(raise_exception=True)
@@ -198,7 +182,7 @@ def order_detail(request, id):
         
         return Response(serializer.data, 201)
     
-    elif request.method == 'PATCH':
+    def patch(self, request, id):
         order = Order.objects.get(id=id)
         serializer = OrderSerializer(order, data = request.data, partial = True)
         serializer.is_valid(raise_exception=True)
@@ -207,7 +191,7 @@ def order_detail(request, id):
         return Response(serializer.data, 201)
     
     
-    elif request.method == 'DELETE':
+    def delete(self, request, id):
         Order.objects.get(id=id).delete()
         
         return Response("Deleted successfully", 204)
@@ -217,16 +201,14 @@ def order_detail(request, id):
 # OrderItem API -------------------------------------------------------
 
 
-## GET, POST: 
-@api_view(['GET', 'POST'])
-def order_item_list(request):
-    if request.method == 'GET':
+class OrderItemView(APIView):
+    def get(self, request):
         order_item = OrderItem.objects.all()
         serializer = OrderItemSerializer(order_item, many = True)
         
         return Response(serializer.data, status.HTTP_200_OK)
     
-    elif request.method == 'POST':
+    def post(self, request):
         serializer = OrderItemSerializer(data = request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -234,17 +216,14 @@ def order_item_list(request):
         return Response(serializer.data, status.HTTP_201_CREATED)
 
 
-## GET(with id), PUT, PATCH, DELETE:
-
-@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
-def order_item_detail(request, id):
-    if request.method == 'GET':
+class OrderItemDetail(APIView):
+    def get(self, request, id):
         order_item = OrderItem.objects.get(id = id)
         serializer = OrderItemSerializer(order_item)
         
         return Response(serializer.data, 200)
     
-    elif request.method == 'PUT':
+    def put(self, request, id):
         order_item = OrderItem.objects.get(id=id)
         serializer = OrderItemSerializer(order_item, data = request.data)
         serializer.is_valid(raise_exception=True)
@@ -252,7 +231,7 @@ def order_item_detail(request, id):
         
         return Response(serializer.data, 201)
     
-    elif request.method == 'PATCH':
+    def patch(self, request, id):
         order_item = OrderItem.objects.get(id=id)
         serializer = OrderItemSerializer(order_item, data = request.data, partial = True)
         serializer.is_valid(raise_exception=True)
@@ -261,7 +240,7 @@ def order_item_detail(request, id):
         return Response(serializer.data, 201)
     
     
-    elif request.method == 'DELETE':
+    def delete(self, request, id):
         OrderItem.objects.get(id=id).delete()
         
         return Response("Deleted successfully", 204)

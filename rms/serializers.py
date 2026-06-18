@@ -99,6 +99,7 @@ class OrderSerializer(serializers.Serializer):
         instance.user = validated_data.get('user', instance.user)
         instance.table = validated_data.get('table', instance.table)
         instance.total_price = validated_data.get('total_price', instance.total_price)
+        instance.status = validated_data.get('status', instance.status)
         instance.payment_status = validated_data.get('payment_status', instance.payment_status)
         
         instance.save()
