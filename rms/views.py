@@ -11,6 +11,8 @@ from .serializers import *
 
 
 # Category API ------------------------------------------------------------------
+
+## get, post:
 class CategoryView(APIView):
     def get(self, request):
         category = Category.objects.all()
@@ -27,7 +29,7 @@ class CategoryView(APIView):
 
 
 
-
+## get, put, patch, delete:
 class CategoryDetail(APIView):
     def get(self, request,id):
         category = Category.objects.get(id=id)
@@ -38,6 +40,14 @@ class CategoryDetail(APIView):
     def put(self, request,id):
         category = Category.objects.get(id=id)
         serializer = CategorySerializer(category, data = request.data)
+        serializer.is_valid(raise_exception = True)
+        serializer.save()
+        
+        return Response(serializer.data, status.HTTP_201_CREATED)
+    
+    def patch(self, request,id):        # patch: partially updates the fields (all fields are not required) in the payload
+        category = Category.objects.get(id=id)
+        serializer = CategorySerializer(category, data = request.data, partial=True)
         serializer.is_valid(raise_exception = True)
         serializer.save()
         
@@ -53,7 +63,7 @@ class CategoryDetail(APIView):
 
 # Food API ----------------------------------------------------------------------
 
-
+## get, post:
 class FoodView(APIView):
     def get(self, request):
         food = Food.objects.all()
@@ -69,6 +79,7 @@ class FoodView(APIView):
         return Response(serializer.data, status.HTTP_201_CREATED)
 
 
+## get, put, patch, delete: 
 class FoodDetail(APIView):
     def get(self, request, id):
         food = Food.objects.get(id = id)
@@ -103,6 +114,7 @@ class FoodDetail(APIView):
 
 # Table API --------------------------------------------------------
 
+## get,post: 
 class TableView(APIView):
     def get(self, request):
         food = Table.objects.all()
@@ -118,6 +130,7 @@ class TableView(APIView):
         return Response(serializer.data, status.HTTP_201_CREATED)
 
 
+## get, put, patch, delete:
 
 class TableDetail(APIView):
     def get(self, request, id):
@@ -152,6 +165,7 @@ class TableDetail(APIView):
 
 # Order API -------------------------------------------------
 
+## get, post: 
 class OrderView(APIView):
     def get(self, request):
         order = Order.objects.all()
@@ -167,6 +181,7 @@ class OrderView(APIView):
         return Response(serializer.data, status.HTTP_201_CREATED)
 
 
+## get, put, patch, delete: 
 class OrderDetail(APIView):
     def get(self, request, id):
         order = Order.objects.get(id = id)
@@ -200,7 +215,7 @@ class OrderDetail(APIView):
     
 # OrderItem API -------------------------------------------------------
 
-
+## get, post: 
 class OrderItemView(APIView):
     def get(self, request):
         order_item = OrderItem.objects.all()
@@ -216,6 +231,7 @@ class OrderItemView(APIView):
         return Response(serializer.data, status.HTTP_201_CREATED)
 
 
+## get, put, patch, delete: 
 class OrderItemDetail(APIView):
     def get(self, request, id):
         order_item = OrderItem.objects.get(id = id)
