@@ -23,4 +23,8 @@ urlpatterns = [
     # OrderItem routes: 
     path('order-item/', OrderItemView.as_view()),
     path('order-item/<id>/', OrderItemDetail.as_view()),
+    
+    # User routes:path('order/', OrderView.as_view()),
+    path('user/', UserView.as_view()),
+    path('user/<id>/', UserDetail.as_view()),
 ]

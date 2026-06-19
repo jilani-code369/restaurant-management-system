@@ -55,8 +55,11 @@ class CategoryDetail(APIView):
 
     def delete(self, request,id):
         category = Category.objects.get(id = id)
-        category.delete()
+        item = OrderItem.objects.filter(food__category = category).count()
+        if item >0:
+            return Response("Protected: Category cannot be deleted. Related to Food in OrderItem.", 400)
         
+        category.delete()
         return Response("Data deleted successfully", status.HTTP_204_NO_CONTENT)
     
 
@@ -106,8 +109,12 @@ class FoodDetail(APIView):
     
     
     def delete(self, request, id):
-        Food.objects.get(id=id).delete()
+        food = Food.objects.get(id=id)
+        item = OrderItem.objects.filter(food = food ).count()
+        if item > 0:
+            return Response("Protected: Food cannot be deleted. Related to OrderItem.", 400)
         
+        food.delete()
         return Response("Deleted successfully", 204)
     
 
@@ -157,7 +164,10 @@ class TableDetail(APIView):
     
     
     def delete(self, request, id):
-        Table.objects.get(id=id).delete()
+        table = Table.objects.get(id=id)
+        item = OrderItem.objects.filter(order__table = table)
+        if item > 0:
+            return Response("Protected: Table cannot be delete. Related to Order in OrderItem.", 400)
         
         return Response("Deleted successfully", 204)
     
@@ -207,8 +217,12 @@ class OrderDetail(APIView):
     
     
     def delete(self, request, id):
-        Order.objects.get(id=id).delete()
+        order = Order.objects.get(id=id)
+        item = OrderItem.objects.filter(order = order).count()
+        if item > 0:
+            return Response("Protected: Order cannot be deleted. Related to OrderItem.", 400)
         
+        order.delete()
         return Response("Deleted successfully", 204)
     
     
@@ -260,4 +274,58 @@ class OrderItemDetail(APIView):
         OrderItem.objects.get(id=id).delete()
         
         return Response("Deleted successfully", 204)
+
+
+
+# User API: ----------------------------------------
+
+## get, post: 
+class UserView(APIView):
+    def get(self, request):
+        user = User.objects.all()
+        serializer = UserSerializer(user, many = True)
+        
+        return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = UserSerializer(data = request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        
+        return Response(serializer.data, 201)
+    
+    
+## get, put, patch, delete: 
+class UserDetail(APIView):
+    def get(self, request, id):
+        user = User.objects.get(id = id)
+        serializer = UserSerializer(user)
+    
+        return Response(serializer.data)
+    
+    def put(self, request, id):
+        user = User.objects.get(id = id )
+        serializer = UserSerializer(user, data= request.data)
+        serializer.is_valid()
+        serializer.save()
+        
+        return Response(serializer.data, 201)
+    
+    def patch(self, request, id):
+        user = User.objects.get(id = id )
+        serializer = UserSerializer(user, data= request.data, partial = True)
+        serializer.is_valid()
+        serializer.save()
+        
+        return Response(serializer.data, 201)
+    
+    def delete(self, request, id):
+        user = User.objects.get(id = id )
+        item = OrderItem.objects.filter(order__user = user).count()
+        if item > 0:
+            return Response("Protected: Cannot be deleted. Related or Order in OrderItem.", 400)
+        
+        user.delete()
+        return Response("User deleted successfully.", 204)
+    
     
