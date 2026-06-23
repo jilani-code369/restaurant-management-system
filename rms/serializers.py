@@ -8,15 +8,15 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id','name']
-    
-    
+     
+
 # Food Serializer
 class FoodSerializer(serializers.ModelSerializer):
     class Meta:
         model = Food
         fields = ['id', 'name', 'description', 'price', 'category']
 
-    
+
 # Table serializer 
 
 class TableSerializer(serializers.ModelSerializer):
@@ -24,6 +24,7 @@ class TableSerializer(serializers.ModelSerializer):
         model = Table
         fields = '__all__'      # '__all__' : includes all model fields into the serializer 
     
+   
     
 # Order Serializer
 

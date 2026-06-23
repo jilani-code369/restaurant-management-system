@@ -10,7 +10,7 @@ User = get_user_model()     # it fetches the active user model from the project 
 
 #2. Category table: 
 class Category(models.Model):
-    name = models.CharField(max_length = 20)
+    name = models.CharField(max_length = 20, unique=True)
     
     def __str__(self):             # this is a dunder function. It displays object as a string in admin panel. 
         return self.name
@@ -18,7 +18,7 @@ class Category(models.Model):
 
 #3. Food table: 
 class Food(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=20, unique=True)
     description = models.TextField()
     price = models.IntegerField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
@@ -29,7 +29,7 @@ class Food(models.Model):
 
 #4. Table table: 
 class Table(models.Model):
-    table_number = models.CharField(max_length=15)  # 'CharField' is used bec. table number can be 'A','B','C' also.
+    table_number = models.CharField(max_length=15, unique=True)  # 'CharField' is used bec. table number can be 'A','B','C' also.
     capacity = models.IntegerField()
     available = models.BooleanField(default = True)
     
