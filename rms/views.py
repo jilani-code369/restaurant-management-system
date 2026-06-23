@@ -1,10 +1,6 @@
-from django.shortcuts import render
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status 
-from rest_framework.views import APIView
-from rest_framework import mixins
 from rest_framework.generics import *
+from rest_framework import viewsets
 
 from .models import *
 from .serializers import *
@@ -13,39 +9,28 @@ from .serializers import *
 
 
 # Category API ------------------------------------------------------------------
-
-class CategoryView(ListCreateAPIView):
+class CategoryAPI(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-
-class CategoryDetail(RetrieveUpdateDestroyAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-
     
-    def delete(self, request, *args, **kwargs):
+
+    def destroy(self, request, *args, **kwargs):
         category = self.get_object()
         item = OrderItem.objects.filter(food__category = category).count()
-        if item >0:
-            return Response("Protected: Category cannot be deleted. Related to Food in OrderItem.", 400)
+        if item>0:
+            return Response("Protected!", 400)
         
         category.delete()
-        return Response("Data deleted successfully", status.HTTP_204_NO_CONTENT)
-    
+        return Response("Deleted successfully!", 204)
 
 
 # Food API ----------------------------------------------------------------------
-
-
-class FoodView(ListCreateAPIView):
+class FoodAPI(viewsets.ModelViewSet):
+    
     queryset = Food.objects.all()
     serializer_class = FoodSerializer
     
-class FoodDetail(RetrieveUpdateDestroyAPIView):
-    queryset = Food.objects.all()
-    serializer_class = FoodSerializer
-    
-    def delete(self, request, *args, **kwargs):
+    def destroy(self, request, *args, **kwargs):
         food = self.get_object()
         item = OrderItem.objects.filter(food = food).count()
         if item >0:
@@ -57,15 +42,11 @@ class FoodDetail(RetrieveUpdateDestroyAPIView):
 
 # Table API --------------------------------------------------------
 
-class TableView(ListCreateAPIView):
+class TableAPI(viewsets.ModelViewSet):
     queryset = Table.objects.all()
     serializer_class = TableSerializer
     
-class TableDetail(RetrieveUpdateDestroyAPIView):
-    queryset = Table.objects.all()
-    serializer_class = TableSerializer
-    
-    def delete(self, request, *args, **kwargs):
+    def destroy(self, request, *args, **kwargs):
         table = self.get_object()
         item = OrderItem.objects.filter(order__table = table).count()
         if item>0: 
@@ -78,15 +59,11 @@ class TableDetail(RetrieveUpdateDestroyAPIView):
 
 # Order API -------------------------------------------------
 
-class OrderView(ListCreateAPIView):
+class OrderAPI(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     
-class OrderDetail(RetrieveUpdateDestroyAPIView):
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer
-    
-    def delete(self, request, *args, **kwargs):
+    def destroy(self, request, *args, **kwargs):
         order = self.get_object()
         item = OrderItem.object.filter(order = order).count()
         if item > 0:
@@ -98,30 +75,22 @@ class OrderDetail(RetrieveUpdateDestroyAPIView):
 
 # OrderItem API -------------------------------------------------------
 
-class OrderItemView(ListCreateAPIView):
+class OrderItemAPI(viewsets.ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
-class OrderItemDetail(RetrieveUpdateDestroyAPIView):
-    queryset = OrderItem.objects.all()
-    serializer_class = OrderItemSerializer
-    
 
 
 # User API ----------------------------------------------------------------
 
-class UserView(ListCreateAPIView):
+class UserAPI(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     
-class UserDetail(RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    
-    def delete(self, request, *args, **kwargs):
+    def destroy(self, request, *args, **kwargs):
         user = self.get_object()
         item = OrderItem.objects.filter(order__user = user).count()
         if item > 0: 
-            return Respnse("Protected! Related to Order of OrderItem.", 400)
+            return Response("Protected! Related to Order of OrderItem.", 400)
         
         user.delete()
         return Response("User deleted.", 204)
