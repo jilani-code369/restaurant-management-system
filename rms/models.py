@@ -51,7 +51,7 @@ class Order(models.Model):
     payment_status = models.BooleanField(default=False)
     
     def __str__(self):
-        return f"User: {self.user} - {self.table}"
+        return f"User:({self.user}) - Table:({self.table})"
     
 
 #6. OrderItem junction table: 

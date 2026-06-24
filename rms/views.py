@@ -14,7 +14,7 @@ class CategoryAPI(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
     
 
-    def destroy(self, request, *args, **kwargs):
+    def destroy(self, request, *args, **kwargs):       # overriding destroy method to handle protected relationship 
         category = self.get_object()
         item = OrderItem.objects.filter(food__category = category).count()
         if item>0:

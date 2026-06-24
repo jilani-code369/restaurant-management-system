@@ -12,9 +12,15 @@ class CategorySerializer(serializers.ModelSerializer):
 
 # Food Serializer
 class FoodSerializer(serializers.ModelSerializer):
+    price_with_tax = serializers.SerializerMethodField()        # to put extra filed in the serializer 
+    category = serializers.StringRelatedField()                 # to show names(string) instead of id of a FK model
+    category_id = serializers.PrimaryKeyRelatedField(queryset = Category.objects.all())  # to show id of a FK mdoel
     class Meta:
         model = Food
-        fields = ['id', 'name', 'description', 'price', 'category']
+        fields = ['id', 'name', 'description', 'price', 'price_with_tax', 'category_id', 'category']
+        
+    def get_price_with_tax(self, Food):             # method to calculate tax
+        return Food.price * 0.10 + Food.price
 
 
 # Table serializer 
@@ -29,6 +35,11 @@ class TableSerializer(serializers.ModelSerializer):
 # Order Serializer
 
 class OrderSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField()
+    user_id = serializers.PrimaryKeyRelatedField(queryset = User.objects.all())
+    table = serializers.StringRelatedField()
+    table_id = serializers.PrimaryKeyRelatedField(queryset = Table.objects.all())
+    
     class Meta:
         model = Order
         exclude = ['total_price']     # 'exclude': exclude specific fields form input/output in serializer
@@ -37,6 +48,11 @@ class OrderSerializer(serializers.ModelSerializer):
 # OrderItem Serializer
 
 class OrderItemSerializer(serializers.ModelSerializer):
+    order = serializers.StringRelatedField()
+    order_id = serializers.PrimaryKeyRelatedField(queryset= Order.objects.all())
+    food = serializers.StringRelatedField()
+    food_id = serializers.PrimaryKeyRelatedField(queryset = Food.objects.all())
+    
     class Meta:
         model = OrderItem
         fields = "__all__"
