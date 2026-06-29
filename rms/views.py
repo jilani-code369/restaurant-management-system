@@ -1,9 +1,14 @@
 from rest_framework.response import Response
 from rest_framework.generics import *
 from rest_framework import viewsets
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import *
 from .serializers import *
+from .pagination import *
+from .filters import *
+
 
 # Create your views here.
 
@@ -13,7 +18,14 @@ class CategoryAPI(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     
-
+    #Pagination: 
+    pagination_class = PageOfTen                     # pagination class of ten data 
+    
+    #Filtering:
+    filter_backends = [SearchFilter]
+    search_fields = ['name']
+    
+    #Overriding destroy method:
     def destroy(self, request, *args, **kwargs):       # overriding destroy method to handle protected relationship 
         category = self.get_object()
         item = OrderItem.objects.filter(food__category = category).count()
@@ -26,10 +38,19 @@ class CategoryAPI(viewsets.ModelViewSet):
 
 # Food API ----------------------------------------------------------------------
 class FoodAPI(viewsets.ModelViewSet):
-    
-    queryset = Food.objects.all()
+    queryset = Food.objects.select_related('category').all()
     serializer_class = FoodSerializer
     
+    #Pagination:
+    pagination_class = PageOfTwenty                      # pagination class of twenty data
+    
+    #Filtering:
+    filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
+    search_fields = ['name', 'category__name']
+    filterset_class = FoodFilter
+    ordering_fields = ['price']
+    
+         
     def destroy(self, request, *args, **kwargs):
         food = self.get_object()
         item = OrderItem.objects.filter(food = food).count()
@@ -45,6 +66,15 @@ class FoodAPI(viewsets.ModelViewSet):
 class TableAPI(viewsets.ModelViewSet):
     queryset = Table.objects.all()
     serializer_class = TableSerializer
+    
+    #Pagination: 
+    pagination_class = PageOfTen
+    
+    #Filtering: 
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['table_number']
+    ordering_fields = ['capacity']
+    
     
     def destroy(self, request, *args, **kwargs):
         table = self.get_object()
@@ -63,6 +93,14 @@ class OrderAPI(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     
+    #Pagination:
+    pagination_class = PageOfTwenty
+    
+    #Filtering:
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['user', 'table', 'status']
+    
+    
     def destroy(self, request, *args, **kwargs):
         order = self.get_object()
         item = OrderItem.object.filter(order = order).count()
@@ -78,6 +116,14 @@ class OrderAPI(viewsets.ModelViewSet):
 class OrderItemAPI(viewsets.ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
+    
+    #Pagination: 
+    pagination_class = PageOfTen
+    
+    #Filtering:
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ['order__user__username', 'food__name', 'order__table__table_number']
+    filterset_fields = ['food', 'order', 'order__table']
 
 
 # User API ----------------------------------------------------------------
@@ -85,6 +131,15 @@ class OrderItemAPI(viewsets.ModelViewSet):
 class UserAPI(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    
+    #Pagination: 
+    pagination_class = PageOfTen
+    
+    #Filtering:
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['username', 'email', 'first_name', 'last_name']
+    ordering_fields = ['username']
+    
     
     def destroy(self, request, *args, **kwargs):
         user = self.get_object()

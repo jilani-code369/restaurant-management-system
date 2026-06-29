@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rms',  
     'rest_framework',    
+    'debug_toolbar',
+    'django_filters',
+    
 ]
 
 MIDDLEWARE = [
@@ -49,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -131,3 +135,30 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+
+
+# INTERNAL IPS for debug toolbar
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
+
+
+
+# REST_FRAMEWORK = {
+    
+#     # Default pagination:
+#     'DEFAULT_PAGINATION_CLASS' : 'rest_framework.pagination.LimitOffsetPagination',   # pagination class takes single string
+#     'PAGE_SIZE' : 10, 
+    
+    
+#     # Default django filters:
+#     'DEFAULT_FILTER_BACKENDS' : [
+#         'rest_framework.filters.SearchFilter', 
+#         'django_filters.rest_framework.DjangoFilterBackend', 
+#         'rest_framework.filters.OrderingFilter'
+#         ],                                                                     # filter backends must be a list/tuple, that's why '[ ]' is used here
+# }
+

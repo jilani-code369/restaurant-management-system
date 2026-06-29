@@ -13,11 +13,11 @@ class CategorySerializer(serializers.ModelSerializer):
 # Food Serializer
 class FoodSerializer(serializers.ModelSerializer):
     price_with_tax = serializers.SerializerMethodField()        # to put extra filed in the serializer 
-    category = serializers.StringRelatedField()                 # to show names(string) instead of id of a FK model
-    category_id = serializers.PrimaryKeyRelatedField(queryset = Category.objects.all())  # to show id of a FK mdoel
+    category_name = serializers.StringRelatedField(source = 'category')                 # to show names(string) instead of id of a FK model
+    category = serializers.PrimaryKeyRelatedField(queryset = Category.objects.all())  # to show id of a FK mdoel
     class Meta:
         model = Food
-        fields = ['id', 'name', 'description', 'price', 'price_with_tax', 'category_id', 'category']
+        fields = ['id', 'name', 'description', 'category_name', 'category', 'price', 'price_with_tax']
         
     def get_price_with_tax(self, Food):             # method to calculate tax
         return Food.price * 0.10 + Food.price
