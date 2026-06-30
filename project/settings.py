@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',    
     'debug_toolbar',
     'django_filters',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'drf_spectacular',
     
 ]
 
@@ -167,8 +168,21 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES' : ['rest_framework.authentication.TokenAuthentication'],
     
     # # Default permission:
-    # 'DEFAULT_PERMISSION_CLASSES' : ['rest_framework.permissions.IsAuthenticated']
+    # 'DEFAULT_PERMISSION_CLASSES' : ['rest_framework.permissions.IsAuthenticated'],
+    
+    
+    # API documentation: 
+    'DEFAULT_SCHEMA_CLASS' : 'drf_spectacular.openapi.AutoSchema', 
+
+}
 
 
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Restaurant Management System',
+    'DESCRIPTION': 'This is restaurant management system.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
 }
 
