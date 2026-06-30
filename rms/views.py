@@ -3,6 +3,7 @@ from rest_framework.generics import *
 from rest_framework import viewsets
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 
 from .models import *
 from .serializers import *
@@ -17,6 +18,9 @@ from .filters import *
 class CategoryAPI(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    
+    #Permission:
+    permission_classes = [IsAuthenticatedOrReadOnly]
     
     #Pagination: 
     pagination_class = PageOfTen                     # pagination class of ten data 
@@ -41,12 +45,15 @@ class FoodAPI(viewsets.ModelViewSet):
     queryset = Food.objects.select_related('category').all()
     serializer_class = FoodSerializer
     
+    #Permission
+    permission_classes = [IsAuthenticated]
+    
     #Pagination:
     pagination_class = PageOfTwenty                      # pagination class of twenty data
     
     #Filtering:
     filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
-    search_fields = ['name', 'category__name']
+    search_fields = ['name', 'category__name']           # '__name' is used to lookup text field inside fk relationship because SearchFilter require text field to perform search
     filterset_class = FoodFilter
     ordering_fields = ['price']
     
@@ -66,6 +73,9 @@ class FoodAPI(viewsets.ModelViewSet):
 class TableAPI(viewsets.ModelViewSet):
     queryset = Table.objects.all()
     serializer_class = TableSerializer
+    
+    #Permission
+    permission_classes = [IsAuthenticatedOrReadOnly]
     
     #Pagination: 
     pagination_class = PageOfTen
@@ -93,6 +103,9 @@ class OrderAPI(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     
+    #Permission
+    permission_classes = [IsAuthenticated]
+    
     #Pagination:
     pagination_class = PageOfTwenty
     
@@ -117,6 +130,9 @@ class OrderItemAPI(viewsets.ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
     
+    #Permission
+    permission_classes = [IsAuthenticated]
+    
     #Pagination: 
     pagination_class = PageOfTen
     
@@ -131,6 +147,9 @@ class OrderItemAPI(viewsets.ModelViewSet):
 class UserAPI(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    
+    #Permission
+    permission_classes = [AllowAny]
     
     #Pagination: 
     pagination_class = PageOfTen

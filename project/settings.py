@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',    
     'debug_toolbar',
     'django_filters',
+    'rest_framework.authtoken'
     
 ]
 
@@ -147,18 +148,27 @@ INTERNAL_IPS = [
 
 
 
-# REST_FRAMEWORK = {
+REST_FRAMEWORK = {
     
-#     # Default pagination:
-#     'DEFAULT_PAGINATION_CLASS' : 'rest_framework.pagination.LimitOffsetPagination',   # pagination class takes single string
-#     'PAGE_SIZE' : 10, 
+    # # Default pagination:
+    # 'DEFAULT_PAGINATION_CLASS' : 'rest_framework.pagination.LimitOffsetPagination',   # pagination class takes single string
+    # 'PAGE_SIZE' : 10, 
     
     
-#     # Default django filters:
-#     'DEFAULT_FILTER_BACKENDS' : [
-#         'rest_framework.filters.SearchFilter', 
-#         'django_filters.rest_framework.DjangoFilterBackend', 
-#         'rest_framework.filters.OrderingFilter'
-#         ],                                                                     # filter backends must be a list/tuple, that's why '[ ]' is used here
-# }
+    # # Default django filters:
+    # 'DEFAULT_FILTER_BACKENDS' : [
+    #     'rest_framework.filters.SearchFilter', 
+    #     'django_filters.rest_framework.DjangoFilterBackend', 
+    #     'rest_framework.filters.OrderingFilter'
+    #     ],                                                                     # filter backends must be a list/tuple, that's why '[ ]' is used here
+    
+    
+    # Default authentication:
+    'DEFAULT_AUTHENTICATION_CLASSES' : ['rest_framework.authentication.TokenAuthentication'],
+    
+    # # Default permission:
+    # 'DEFAULT_PERMISSION_CLASSES' : ['rest_framework.permissions.IsAuthenticated']
+
+
+}
 
