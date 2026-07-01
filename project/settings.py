@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework.authtoken',
     'drf_spectacular',
+    'users',
     
 ]
 
@@ -186,3 +187,6 @@ SPECTACULAR_SETTINGS = {
     # OTHER SETTINGS
 }
 
+
+
+AUTH_USER_MODEL = 'users.User'
