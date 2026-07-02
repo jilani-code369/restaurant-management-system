@@ -14,10 +14,10 @@ class CategorySerializer(serializers.ModelSerializer):
 class FoodSerializer(serializers.ModelSerializer):
     price_with_tax = serializers.SerializerMethodField()        # to put extra filed in the serializer 
     category_name = serializers.StringRelatedField(source = 'category')                 # to show names(string) instead of id of a FK model
-    category = serializers.PrimaryKeyRelatedField(queryset = Category.objects.all())  # to show id of a FK mdoel
+    
     class Meta:
         model = Food
-        fields = ['id', 'name', 'description', 'category_name', 'category', 'price', 'price_with_tax']
+        fields = ['id', 'name', 'description', 'category', 'category_name', 'price', 'price_with_tax']
         
     def get_price_with_tax(self, Food):             # method to calculate tax
         return Food.price * 0.10 + Food.price
@@ -30,33 +30,30 @@ class TableSerializer(serializers.ModelSerializer):
         model = Table
         fields = '__all__'      # '__all__' : includes all model fields into the serializer 
     
-   
-    
-# Order Serializer
 
-class OrderSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField()
-    user_id = serializers.PrimaryKeyRelatedField(queryset = User.objects.all())
-    table = serializers.StringRelatedField()
-    table_id = serializers.PrimaryKeyRelatedField(queryset = Table.objects.all())
-    
-    class Meta:
-        model = Order
-        exclude = ['total_price']     # 'exclude': exclude specific fields form input/output in serializer
-    
-    
+
 # OrderItem Serializer
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    order = serializers.StringRelatedField()
-    order_id = serializers.PrimaryKeyRelatedField(queryset= Order.objects.all())
-    food = serializers.StringRelatedField()
-    food_id = serializers.PrimaryKeyRelatedField(queryset = Food.objects.all())
-    
+
     class Meta:
         model = OrderItem
         fields = "__all__"
         
+
+    
+# Order Serializer
+
+class OrderSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default = serializers.CurrentUserDefault())      # 'CurrentUserDefault()' : send the current logged-in user automatically, 'HiddenField' : hide the field from the serializer post
+    user_name = serializers.StringRelatedField(source = 'user')
+    items = OrderItemSerializer(many = True)      # it's necessay to include 'many=True' here because 'OrderItem' serializer serializes multiple data
+    
+    class Meta:
+        model = Order
+        fields = ['id', 'user', 'user_name', 'table', 'total_price', 'status', 'payment_status', 'items']
+    
+
 
 # User Serializer
 

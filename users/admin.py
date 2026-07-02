@@ -5,7 +5,7 @@ from .models import User
 # Register your models here.
 
 @admin.register(User)
-class UserAdmin(UA):
+class UserAdmin(UA):              # 'UserAdmin' is used instead of 'ModelAdmin' because 'UserAdmin' hash the password when creating user in Admin Panel
     # Customize the admin panel of users
     list_display = ['id', 'username', 'first_name', 'last_name', 'email', 'phone', 'role', 'is_active', 'is_staff', 'is_superuser', 'last_login', 'date_joined']      # don't include 'password' in the list_display, it cause security issue and also looks messy
     list_display_links = ['id', 'username']
@@ -27,4 +27,3 @@ class UserAdmin(UA):
     
     
 
-    

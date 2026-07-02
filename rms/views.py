@@ -100,7 +100,7 @@ class TableAPI(viewsets.ModelViewSet):
 # Order API -------------------------------------------------
 
 class OrderAPI(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
+    queryset = Order.objects.prefetch_related('items').all()
     serializer_class = OrderSerializer
     
     #Permission
@@ -116,7 +116,7 @@ class OrderAPI(viewsets.ModelViewSet):
     
     def destroy(self, request, *args, **kwargs):
         order = self.get_object()
-        item = OrderItem.object.filter(order = order).count()
+        item = OrderItem.objects.filter(order = order).count()
         if item > 0:
             return Reponse("Protected!. Related to OrderItem.", 400)
         
