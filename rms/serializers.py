@@ -38,7 +38,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderItem
-        fields = "__all__"
+        fields = ['food']
         
 
     
@@ -53,7 +53,27 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = ['id', 'user', 'user_name', 'table', 'total_price', 'status', 'payment_status', 'items']
     
+    
+    # create() method for nested serializer: 
+    def create(self, validated_data):
+        items = validated_data.pop('items')  # extracting 'items' field here
+        
+        #calculating total price
+        
+        total = 0
+        for item in items:
+            food_item = item.get('food')
+            total += food_item.price
+            
+        # creating order
+        order = Order.objects.create(total_price = total, **validated_data)
+        
+        # creating OrderItem
+        for item in items:
+            OrderItem.objects.create(order = order, food = item.get('food'))
 
+        return order 
+        
 
 # User Serializer
 
