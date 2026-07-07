@@ -4,6 +4,7 @@ from rest_framework import viewsets
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
+from drf_spectacular.utils import extend_schema
 
 from .models import *
 from .serializers import *
@@ -15,6 +16,7 @@ from .filters import *
 
 
 # Category API ------------------------------------------------------------------
+@extend_schema(tags=['Category'])              # it groups APIs under one section in Swagger docs
 class CategoryAPI(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -41,6 +43,8 @@ class CategoryAPI(viewsets.ModelViewSet):
 
 
 # Food API ----------------------------------------------------------------------
+
+@extend_schema(tags=['Food'])
 class FoodAPI(viewsets.ModelViewSet):
     queryset = Food.objects.select_related('category').all()
     serializer_class = FoodSerializer
@@ -70,6 +74,7 @@ class FoodAPI(viewsets.ModelViewSet):
 
 # Table API --------------------------------------------------------
 
+@extend_schema(tags=['Table'])
 class TableAPI(viewsets.ModelViewSet):
     queryset = Table.objects.all()
     serializer_class = TableSerializer
@@ -99,6 +104,7 @@ class TableAPI(viewsets.ModelViewSet):
 
 # Order API -------------------------------------------------
 
+@extend_schema(tags=['Order'])
 class OrderAPI(viewsets.ModelViewSet):
     queryset = Order.objects.prefetch_related('items').all()
     serializer_class = OrderSerializer
@@ -126,6 +132,7 @@ class OrderAPI(viewsets.ModelViewSet):
 
 # OrderItem API -------------------------------------------------------
 
+@extend_schema(tags=['OrderItem'])
 class OrderItemAPI(viewsets.ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
@@ -144,6 +151,7 @@ class OrderItemAPI(viewsets.ModelViewSet):
 
 # User API ----------------------------------------------------------------
 
+@extend_schema(tags=['User'])
 class UserAPI(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
