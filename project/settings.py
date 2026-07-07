@@ -190,3 +190,13 @@ SPECTACULAR_SETTINGS = {
 
 
 AUTH_USER_MODEL = 'users.User'
+
+
+
+# Email Setup (smtp) 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True   # USE_TLS : says, do you want to use TLS encryption while sending email(True/False)
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'nadafjilani182@gmail.com'
+EMAIL_HOST_PASSWORD = 'jspfkrwtcuvjucfs' 
