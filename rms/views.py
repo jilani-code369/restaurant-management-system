@@ -16,7 +16,7 @@ from .filters import *
 
 
 # Category API ------------------------------------------------------------------
-@extend_schema(tags=['Category'])              # it groups APIs under one section in Swagger docs
+@extend_schema(tags=['Category'])              # implement extend_schema tags for Swagger grouping
 class CategoryAPI(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer

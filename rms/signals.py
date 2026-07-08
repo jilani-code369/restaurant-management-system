@@ -21,7 +21,8 @@ def notify(sender, instance, created, **kwargs):
 
 
 
-# How signal works: 
+
+# How signal works:--------------------------------------------------------- 
 
 # First, Django registers/connects your function with the signal (post_save)
 #
