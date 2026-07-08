@@ -44,12 +44,14 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'drf_spectacular',
     'users',
+     "corsheaders",
     
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",              # 👈 corsheaders added here
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -200,3 +202,10 @@ EMAIL_USE_TLS = True   # USE_TLS : says, do you want to use TLS encryption while
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'nadafjilani182@gmail.com'
 EMAIL_HOST_PASSWORD = 'jspfkrwtcuvjucfs' 
+
+
+
+
+# Cors header: 
+
+CORS_ALLOW_ALL_ORIGINS = True
