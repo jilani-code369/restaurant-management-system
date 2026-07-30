@@ -12,18 +12,24 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 
+import os
+from dotenv import load_dotenv
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+load_dotenv()               # calling load_doteve() function 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-j6t&a^n4m3kqw$+z6_xgxj3p_-sovq$ko+j8##zo2sonx-n()i'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', "False") == "True"
 
 ALLOWED_HOSTS = []
 
@@ -95,12 +101,12 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Postgres Integration
 DATABASES = {
     'default' : {
-        'ENGINE' : 'django.db.backends.postgresql',     # Path of 'postgresql' package
-        'NAME'  : 'rms2',                               # Name of your database
-        'USER' : 'postgres',                            # Username tha you have set
-        'PASSWORD' : '123',                             # Password that you have set
-        'HOST'  : 'localhost',                          # Host name. 'localhost' in this case
-        'PORT'  : '5432'                                # Port. '5432' by default
+        'ENGINE' : os.getenv('DB_ENGINE'),                      # Path of 'postgresql' package
+        'NAME'  : os.getenv('DB_NAME'),                         # Name of your database
+        'USER' : os.getenv('DB_USER'),                          # Username tha you have set
+        'PASSWORD' : os.getenv('DB_PASSWORD'),                  # Password that you have set
+        'HOST'  : os.getenv('DB_HOST'),                         # Host name. 'localhost' in this case
+        'PORT'  : os.getenv('DB_PORT')                          # Port. '5432' by default
     }
 }
 
@@ -180,7 +186,7 @@ REST_FRAMEWORK = {
 }
 
 
-
+# Spectacular setting for Swagger ui
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Restaurant Management System',
     'DESCRIPTION': 'This is restaurant management system.',
@@ -190,22 +196,23 @@ SPECTACULAR_SETTINGS = {
 }
 
 
-
+# Custom user included here
 AUTH_USER_MODEL = 'users.User'
 
 
 
 # Email Setup (smtp) 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True   # USE_TLS : says, do you want to use TLS encryption while sending email(True/False)
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'nadafjilani182@gmail.com'
-EMAIL_HOST_PASSWORD = 'jspfkrwtcuvjucfs' 
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', "False")==True   # USE_TLS : says, do you want to use TLS encryption while sending email(True/False)
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
 
 
 
 # Cors header: 
+CORS_ALLOW_ALL_ORIGINS = os.getenv('CORS_ALLOW_ALL_ORIGINS', False) == True
 
-CORS_ALLOW_ALL_ORIGINS = True
+

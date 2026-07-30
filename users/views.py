@@ -16,7 +16,7 @@ class LoginAPI(APIView):
         if username is None or password is None:
             raise serializers.ValidationError({"error":"Both fields are required."})    #raising error if any one field is left empty
 
-        user = authenticate(username = username, password = password)       # it checks if the user exists or not. authenticate used to deal with the password authenticating
+        user = authenticate(username = username, password = password)       # checks if the username and password is correct or not. authenticate(): for hashed password
         if user:
             token, created = Token.objects.get_or_create(user = user)
             return Response({
